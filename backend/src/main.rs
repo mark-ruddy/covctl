@@ -42,7 +42,6 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(routes::index))
-        .route("/sample", post(routes::sample))
         .layer(Extension(handler_state));
 
     let addr: SocketAddr = match args.addr.parse() {

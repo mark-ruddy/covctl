@@ -3,7 +3,6 @@ use http::StatusCode;
 use log::{error, info};*/
 use std::error::Error;
 
-mod api_requests;
 pub mod data;
 
 /// State is shared across handlers

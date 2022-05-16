@@ -1,29 +1,64 @@
-use serde::Deserialize;
+use log::info;
+use reqwest::Response;
+use std::env;
+use std::error::Error;
 
-#[derive(Deserialize, Debug)]
-pub struct BalanceItem {
-    pub contract_decimals: i32,
-    pub contract_name: String,
-    pub contract_ticker_symbol: String,
-    pub contact_address: String,
-    pub supports_erc: Vec<String>,
-    pub logo_url: String,
-    pub last_transferred_at: String,
-    #[serde(alias = "type")]
-    pub balance_type: String,
-    pub balance: String,
-    pub balance_24h: String,
-    pub quote_rate: f32,
-    pub quote: f32,
+mod resources;
+
+async fn make_request(url: &str) -> Result<Response, Box<dyn Error>> {
+    info!("Sending API request to: {}", url);
+    let resp = reqwest::get(url).await?;
+    Ok(resp)
 }
 
-#[derive(Deserialize, Debug)]
-pub struct Balance {
-    pub address: String,
-    pub updated_at: String,
-    pub next_update_at: String,
-    pub quote_currency: String,
-    pub chain_id: i32,
-    #[serde(with = "serde_with::json::nested")]
-    pub item: BalanceItem,
+fn get_env_api_key() -> Result<String, Box<dyn Error>> {
+    match env::var("COVALENT_SIFTER_API_KEY") {
+        Ok(val) => Ok(val),
+        Err(e) => match e {
+            std::env::VarError::NotPresent => {
+                Err("Required environment variable {} is not present".into())
+            }
+            std::env::VarError::NotUnicode(_) => {
+                Err("Environment variable {} is not valid unicode".into())
+            }
+        },
+    }
+}
+
+pub struct CovalentClient {
+    pub base_url: String,
+    pub chain_id: String,
+    pub api_key: String,
+}
+
+impl CovalentClient {
+    /// Create a new CovalentClient bound to a certain chain_id
+    /// ## Klaytn Client Example
+    /// ```
+    /// let klaytn_client = CovalentClient::new("8127").unwrap();
+    /// ```
+    pub fn new(chain_id: &str) -> Result<CovalentClient, Box<dyn Error>> {
+        Ok(CovalentClient {
+            base_url: "https://api.covalenthq.com/v1".to_string(),
+            chain_id: chain_id.to_string(),
+            api_key: get_env_api_key()?,
+        })
+    }
+
+    /// Get token balance information for an address
+    pub async fn get_token_balances(
+        &self,
+        address: &str,
+    ) -> Result<resources::Balance, Box<dyn Error>> {
+        let resp = make_request(
+            format!(
+                "/{}/address/{}/balances_v2/?key={}",
+                self.chain_id, address, self.api_key
+            )
+            .as_str(),
+        )
+        .await?;
+        let resource: resources::Balance = resp.json().await?;
+        Ok(resource)
+    }
 }

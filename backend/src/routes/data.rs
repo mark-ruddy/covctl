@@ -1,6 +1,7 @@
 use mongodb::options::ClientOptions;
 use std::error::Error;
 
+/// Create and return a connection to a MongoDB database
 pub async fn init_mongo_client(
     conn_url: &str,
     db_name: &str,

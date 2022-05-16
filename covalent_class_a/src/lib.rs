@@ -61,4 +61,38 @@ impl CovalentClient {
         let resource: resources::Balance = resp.json().await?;
         Ok(resource)
     }
+
+    /// Get token holders at a block height for an address
+    pub async fn get_token_holders_any_bh(
+        &self,
+        address: &str,
+    ) -> Result<resources::TokenHolder, Box<dyn Error>> {
+        let resp = make_request(
+            format!(
+                "/{}/address/{}/token_holders/?key={}",
+                self.chain_id, address, self.api_key
+            )
+            .as_str(),
+        )
+        .await?;
+        let resource: resources::TokenHolder = resp.json().await?;
+        Ok(resource)
+    }
+
+    /// Get transactions for an address
+    pub async fn get_transactions_for_address(
+        &self,
+        address: &str,
+    ) -> Result<resources::Transaction, Box<dyn Error>> {
+        let resp = make_request(
+            format!(
+                "/{}/address/{}/transactions_v2/?key={}",
+                self.chain_id, address, self.api_key
+            )
+            .as_str(),
+        )
+        .await?;
+        let resource: resources::Transaction = resp.json().await?;
+        Ok(resource)
+    }
 }

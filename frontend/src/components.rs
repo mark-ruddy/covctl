@@ -1,3 +1,4 @@
+use covalent_class_a::{resources, CovalentClient};
 use log::{info, warn};
 use std::error::Error;
 use wasm_bindgen::JsCast;
@@ -41,6 +42,12 @@ fn get_tx_hash(value: &str) -> Result<H256, Box<dyn Error>> {
     Ok(tx_hash)
 }
 
+#[derive(PartialEq)]
+pub enum SearchResultTypes {
+    Balance(resources::Balance),
+    Transaction(resources::Transaction),
+}
+
 impl Component for SearchBar {
     type Message = Msg;
     type Properties = ();
@@ -61,16 +68,24 @@ impl Component for SearchBar {
             // TODO: comment out below logging when not testing
             info!("Current search query: {}", full_value);
 
-            // TODO: for every change to the text parse out the content for the API parameters we're looking for
-            // once a "full parameter" is found, attempt to make API calls using it
-            // e.g. tx_hash, address
+            let results: Vec<SearchResultTypes> = vec![];
+
+            let client = CovalentClient::new("8127").expect("Could not create client");
             match get_address(&full_value) {
-                Ok(_) => info!("Found valid address"),
+                Ok(_) => {
+                    info!("Found valid address");
+                    let result = client
+                        .get_token_balances(&full_value)
+                        .expect("Failed to get token balances");
+                    results.push(SearchResultTypes::Balance(result));
+                }
                 Err(e) => info!("Not a valid address: {}", e),
             }
 
             match get_tx_hash(&full_value) {
-                Ok(_) => info!("Found valid tx_hash"),
+                Ok(_) => {
+                    info!("Found valid tx_hash");
+                }
                 Err(e) => info!("Not a valid tx_hash: {}", e),
             }
 
@@ -91,6 +106,12 @@ impl Component for SearchBar {
 
 pub struct SearchResult;
 
+#[derive(Properties, Clone, PartialEq)]
+pub struct SearchResultProps {
+    results: Vec<SearchResultTypes>,
+    // on_click: Callback<SearchResultDetail>,
+}
+
 impl Component for SearchResult {
     type Message = ();
     type Properties = ();
@@ -103,5 +124,22 @@ impl Component for SearchResult {
 
     fn create(_: &Context<Self>) -> Self {
         SearchResult {}
+    }
+}
+
+pub struct SearchResultDetail;
+
+impl Component for SearchResultDetail {
+    type Message = ();
+    type Properties = ();
+
+    fn view(&self, _: &Context<Self>) -> Html {
+        html! {
+            <h1>{ "Sample Search Result Detail" }</h1>
+        }
+    }
+
+    fn create(_: &Context<Self>) -> Self {
+        SearchResultDetail {}
     }
 }

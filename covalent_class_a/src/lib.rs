@@ -1,13 +1,13 @@
 use log::info;
-use reqwest::Response;
+use reqwest::blocking::Response;
 use std::env;
 use std::error::Error;
 
-mod resources;
+pub mod resources;
 
-async fn make_request(url: &str) -> Result<Response, Box<dyn Error>> {
+fn make_request(url: &str) -> Result<Response, Box<dyn Error>> {
     info!("Sending API request to: {}", url);
-    let resp = reqwest::get(url).await?;
+    let resp = reqwest::blocking::get(url)?;
     Ok(resp)
 }
 
@@ -46,24 +46,20 @@ impl CovalentClient {
     }
 
     /// Get token balance information for an address
-    pub async fn get_token_balances(
-        &self,
-        address: &str,
-    ) -> Result<resources::Balance, Box<dyn Error>> {
+    pub fn get_token_balances(&self, address: &str) -> Result<resources::Balance, Box<dyn Error>> {
         let resp = make_request(
             format!(
                 "/{}/address/{}/balances_v2/?key={}",
                 self.chain_id, address, self.api_key
             )
             .as_str(),
-        )
-        .await?;
-        let resource: resources::Balance = resp.json().await?;
+        )?;
+        let resource: resources::Balance = resp.json()?;
         Ok(resource)
     }
 
     /// Get token holders at a block height for an address
-    pub async fn get_token_holders_any_bh(
+    pub fn get_token_holders_any_bh(
         &self,
         address: &str,
     ) -> Result<resources::TokenHolder, Box<dyn Error>> {
@@ -73,14 +69,13 @@ impl CovalentClient {
                 self.chain_id, address, self.api_key
             )
             .as_str(),
-        )
-        .await?;
-        let resource: resources::TokenHolder = resp.json().await?;
+        )?;
+        let resource: resources::TokenHolder = resp.json()?;
         Ok(resource)
     }
 
     /// Get transactions for an address
-    pub async fn get_transactions_for_address(
+    pub fn get_transactions_for_address(
         &self,
         address: &str,
     ) -> Result<resources::Transaction, Box<dyn Error>> {
@@ -90,9 +85,8 @@ impl CovalentClient {
                 self.chain_id, address, self.api_key
             )
             .as_str(),
-        )
-        .await?;
-        let resource: resources::Transaction = resp.json().await?;
+        )?;
+        let resource: resources::Transaction = resp.json()?;
         Ok(resource)
     }
 }

@@ -46,7 +46,7 @@ impl CovalentClient {
     }
 
     /// Get token balance information for an address
-    pub fn get_token_balances(&self, address: &str) -> Result<resources::Balance, Box<dyn Error>> {
+    pub fn get_token_balances(&self, address: &str) -> Result<resources::Balances, Box<dyn Error>> {
         let resp = make_request(
             format!(
                 "/{}/address/{}/balances_v2/?key={}",
@@ -54,7 +54,7 @@ impl CovalentClient {
             )
             .as_str(),
         )?;
-        let resource: resources::Balance = resp.json()?;
+        let resource: resources::Balances = resp.json()?;
         Ok(resource)
     }
 
@@ -62,7 +62,7 @@ impl CovalentClient {
     pub fn get_token_holders_any_bh(
         &self,
         address: &str,
-    ) -> Result<resources::TokenHolder, Box<dyn Error>> {
+    ) -> Result<resources::TokenHolders, Box<dyn Error>> {
         let resp = make_request(
             format!(
                 "/{}/address/{}/token_holders/?key={}",
@@ -70,7 +70,7 @@ impl CovalentClient {
             )
             .as_str(),
         )?;
-        let resource: resources::TokenHolder = resp.json()?;
+        let resource: resources::TokenHolders = resp.json()?;
         Ok(resource)
     }
 
@@ -78,7 +78,7 @@ impl CovalentClient {
     pub fn get_transactions_for_address(
         &self,
         address: &str,
-    ) -> Result<resources::Transaction, Box<dyn Error>> {
+    ) -> Result<resources::Transactions, Box<dyn Error>> {
         let resp = make_request(
             format!(
                 "/{}/address/{}/transactions_v2/?key={}",
@@ -86,7 +86,22 @@ impl CovalentClient {
             )
             .as_str(),
         )?;
-        let resource: resources::Transaction = resp.json()?;
+        let resource: resources::Transactions = resp.json()?;
+        Ok(resource)
+    }
+
+    pub fn get_transaction(
+        &self,
+        tx_hash: &str,
+    ) -> Result<resources::Transactions, Box<dyn Error>> {
+        let resp = make_request(
+            format!(
+                "/{}/address/{}/transaction_v2/?key={}",
+                self.chain_id, tx_hash, self.api_key
+            )
+            .as_str(),
+        )?;
+        let resource: resources::Transactions = resp.json()?;
         Ok(resource)
     }
 }

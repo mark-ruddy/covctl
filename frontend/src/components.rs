@@ -44,8 +44,8 @@ fn get_tx_hash(value: &str) -> Result<H256, Box<dyn Error>> {
 
 #[derive(PartialEq)]
 pub enum SearchResultTypes {
-    Balance(resources::Balance),
-    Transaction(resources::Transaction),
+    Balances(resources::Balances),
+    Transactions(resources::Transactions),
 }
 
 impl Component for SearchBar {
@@ -68,16 +68,21 @@ impl Component for SearchBar {
             // TODO: comment out below logging when not testing
             info!("Current search query: {}", full_value);
 
-            let results: Vec<SearchResultTypes> = vec![];
+            let mut results: Vec<SearchResultTypes> = vec![];
 
             let client = CovalentClient::new("8127").expect("Could not create client");
             match get_address(&full_value) {
                 Ok(_) => {
                     info!("Found valid address");
-                    let result = client
+                    let balances = client
                         .get_token_balances(&full_value)
                         .expect("Failed to get token balances");
-                    results.push(SearchResultTypes::Balance(result));
+                    results.push(SearchResultTypes::Balances(balances));
+
+                    let transactions = client
+                        .get_transactions_for_address(&full_value)
+                        .expect("Failed to get transactions for address");
+                    results.push(SearchResultTypes::Transactions(transactions))
                 }
                 Err(e) => info!("Not a valid address: {}", e),
             }
@@ -106,7 +111,7 @@ impl Component for SearchBar {
 
 pub struct SearchResult;
 
-#[derive(Properties, Clone, PartialEq)]
+#[derive(Properties, PartialEq)]
 pub struct SearchResultProps {
     results: Vec<SearchResultTypes>,
     // on_click: Callback<SearchResultDetail>,

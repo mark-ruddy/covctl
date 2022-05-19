@@ -1,5 +1,5 @@
 use covalent_class_a::{resources, CovalentClient};
-use log::{info, warn};
+use log::info;
 use std::error::Error;
 use wasm_bindgen::JsCast;
 use web3::types::{Address, H256};
@@ -26,12 +26,6 @@ impl Component for App {
     }
 }
 
-pub enum Msg {
-    InputValue(String),
-}
-
-pub struct SearchBar;
-
 fn get_address(value: &str) -> Result<Address, Box<dyn Error>> {
     let addr: Address = value.parse()?;
     Ok(addr)
@@ -42,15 +36,29 @@ fn get_tx_hash(value: &str) -> Result<H256, Box<dyn Error>> {
     Ok(tx_hash)
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone)]
 pub enum SearchResultTypes {
     Balances(resources::Balances),
     Transactions(resources::Transactions),
 }
 
+pub struct SearchBar {
+    results: Vec<SearchResultTypes>,
+}
+
 impl Component for SearchBar {
-    type Message = Msg;
+    type Message = Vec<SearchResultTypes>;
     type Properties = ();
+
+    // When a new message is received from the input being updated we should re-render
+    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+        self.results = msg;
+        true
+    }
+
+    fn create(_: &Context<Self>) -> Self {
+        SearchBar { results: vec![] }
+    }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let on_change = ctx.link().callback(|e: InputEvent| {
@@ -69,18 +77,23 @@ impl Component for SearchBar {
             info!("Current search query: {}", full_value);
 
             let mut results: Vec<SearchResultTypes> = vec![];
+            // The Klaytn mainnet chain_id on the unified Covalent API is 8127
+            let client = CovalentClient::new_env_api_key("8127").expect("Could not create client");
 
-            let client = CovalentClient::new("8127").expect("Could not create client");
+            // let rt = tokio::runtime::Runtime::new().expect("Could not create tokio runtime");
+            let rt = tokio::runtime::Builder::new_current_thread()
+                .build()
+                .expect("Could not create tokio runtime");
             match get_address(&full_value) {
                 Ok(_) => {
                     info!("Found valid address");
-                    let balances = client
-                        .get_token_balances(&full_value)
+                    let balances = rt
+                        .block_on(client.get_token_balances(&full_value))
                         .expect("Failed to get token balances");
                     results.push(SearchResultTypes::Balances(balances));
 
-                    let transactions = client
-                        .get_transactions_for_address(&full_value)
+                    let transactions = rt
+                        .block_on(client.get_transactions_for_address(&full_value))
                         .expect("Failed to get transactions for address");
                     results.push(SearchResultTypes::Transactions(transactions))
                 }
@@ -93,42 +106,71 @@ impl Component for SearchBar {
                 }
                 Err(e) => info!("Not a valid tx_hash: {}", e),
             }
-
-            Msg::InputValue(full_value)
+            results
         });
+
         html! {
-            <label for="search-bar">
-            { "My Search Bar: " }
-                <input oninput={on_change} id="search-bar" type="text"/>
-            </label>
+            <>
+                <label for="search-bar">
+                { "My Search Bar: " }
+                    <input oninput={on_change} id="search-bar" type="text"/>
+                </label>
+                <SearchResultList results={self.results.clone()}/>
+            </>
         }
     }
-
-    fn create(_: &Context<Self>) -> Self {
-        SearchBar {}
-    }
 }
-
-pub struct SearchResult;
 
 #[derive(Properties, PartialEq)]
-pub struct SearchResultProps {
+pub struct SearchResultListProps {
     results: Vec<SearchResultTypes>,
-    // on_click: Callback<SearchResultDetail>,
 }
 
-impl Component for SearchResult {
-    type Message = ();
-    type Properties = ();
+pub struct SearchResultList {
+    props: SearchResultListProps,
+}
 
-    fn view(&self, _: &Context<Self>) -> Html {
-        html! {
-            <h1>{ "Sample Search Result" }</h1>
+impl Component for SearchResultList {
+    type Message = ();
+    type Properties = SearchResultListProps;
+
+    fn create(_: &Context<Self>) -> Self {
+        SearchResultList {
+            props: SearchResultListProps { results: vec![] },
         }
     }
 
-    fn create(_: &Context<Self>) -> Self {
-        SearchResult {}
+    fn view(&self, _: &Context<Self>) -> Html {
+        let mut rendered_results: Vec<Html> = vec![];
+        for result in &self.props.results {
+            match result {
+                SearchResultTypes::Balances(balances) => {
+                    rendered_results.push(html! {
+                        <>
+                            <h3>{ "Balances Result For Address" }</h3>
+                            <p>{ "For address:" } { &balances.address }</p>
+                            <p>{ "Currency:" } { &balances.quote_currency }</p>
+                        </>
+                    });
+                }
+                SearchResultTypes::Transactions(transactions) => {
+                    rendered_results.push(html! {
+                        <>
+                            <h3>{ "Transactions Result For Address" }</h3>
+                            <p>{ "For address:" } { &transactions.address }</p>
+                            <p>{ "Currency:" } { &transactions.quote_currency }</p>
+                            <p> { "Chain ID:" } { &transactions.chain_id }</p>
+                        </>
+                    });
+                }
+            }
+        }
+        html! {
+            <>
+                <h2>{ "Search Results should be below here" }</h2>
+                { for rendered_results }
+            </>
+        }
     }
 }
 
@@ -138,13 +180,13 @@ impl Component for SearchResultDetail {
     type Message = ();
     type Properties = ();
 
+    fn create(_: &Context<Self>) -> Self {
+        SearchResultDetail {}
+    }
+
     fn view(&self, _: &Context<Self>) -> Html {
         html! {
             <h1>{ "Sample Search Result Detail" }</h1>
         }
-    }
-
-    fn create(_: &Context<Self>) -> Self {
-        SearchResultDetail {}
     }
 }

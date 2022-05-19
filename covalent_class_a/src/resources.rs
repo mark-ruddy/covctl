@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug, PartialEq)]
+#[derive(Deserialize, Debug, PartialEq, Clone)]
 pub struct BalanceItem {
     pub contract_decimals: i32,
     pub contract_name: String,
@@ -17,7 +17,7 @@ pub struct BalanceItem {
     pub quote: f32,
 }
 
-#[derive(Deserialize, Debug, PartialEq)]
+#[derive(Deserialize, Debug, PartialEq, Clone)]
 pub struct Balances {
     pub address: String,
     pub updated_at: String,
@@ -28,7 +28,7 @@ pub struct Balances {
     pub items: Vec<BalanceItem>,
 }
 
-#[derive(Deserialize, Debug, PartialEq)]
+#[derive(Deserialize, Debug, PartialEq, Clone)]
 pub struct TokenHolderItem {
     pub contract_decimals: i32,
     pub contract_name: String,
@@ -43,14 +43,14 @@ pub struct TokenHolderItem {
     pub block_height: i64,
 }
 
-#[derive(Deserialize, Debug, PartialEq)]
+#[derive(Deserialize, Debug, PartialEq, Clone)]
 pub struct TokenHolders {
     pub updated_at: String,
     #[serde(with = "serde_with::json::nested")]
     pub items: Vec<TokenHolderItem>,
 }
 
-#[derive(Deserialize, Debug, PartialEq)]
+#[derive(Deserialize, Debug, PartialEq, Clone)]
 pub struct TransactionItem {
     pub block_signed_at: String,
     pub block_height: i32,
@@ -73,7 +73,7 @@ pub struct TransactionItem {
     pub log_events: Vec<()>,
 }
 
-#[derive(Deserialize, Debug, PartialEq)]
+#[derive(Deserialize, Debug, PartialEq, Clone)]
 pub struct Transactions {
     pub address: String,
     pub updated_at: String,

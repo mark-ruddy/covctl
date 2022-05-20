@@ -396,7 +396,6 @@ version = "0.1.0"
 dependencies = [
  "covalent_class_a",
  "log",
- "tokio",
  "wasm-bindgen",
  "wasm-logger",
  "web-sys",

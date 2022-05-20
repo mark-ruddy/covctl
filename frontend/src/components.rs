@@ -76,26 +76,16 @@ impl Component for SearchBar {
             // TODO: comment out below logging when not testing
             info!("Current search query: {}", full_value);
 
-            let mut results: Vec<SearchResultTypes> = vec![];
+            let results: Vec<SearchResultTypes> = vec![];
             // The Klaytn mainnet chain_id on the unified Covalent API is 8127
-            let client = CovalentClient::new_env_api_key("8127").expect("Could not create client");
+            // let _client = CovalentClient::new("8127")
+            // .expect("Could not create client");
 
-            // let rt = tokio::runtime::Runtime::new().expect("Could not create tokio runtime");
-            let rt = tokio::runtime::Builder::new_current_thread()
-                .build()
-                .expect("Could not create tokio runtime");
             match get_address(&full_value) {
                 Ok(_) => {
                     info!("Found valid address");
-                    let balances = rt
-                        .block_on(client.get_token_balances(&full_value))
-                        .expect("Failed to get token balances");
-                    results.push(SearchResultTypes::Balances(balances));
-
-                    let transactions = rt
-                        .block_on(client.get_transactions_for_address(&full_value))
-                        .expect("Failed to get transactions for address");
-                    results.push(SearchResultTypes::Transactions(transactions))
+                    // TODO: re-setup axum backend and then use the yew fetch api here to call it
+                    // yew fetches from backend route(no parameters by default, let the backend handle configuration like chain_id) -> backend route uses library method to make api call, and serializes it to JSON -> frontend gets the JSON and deserializes it using the library resource structs
                 }
                 Err(e) => info!("Not a valid address: {}", e),
             }

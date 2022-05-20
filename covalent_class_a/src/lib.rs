@@ -33,7 +33,7 @@ pub struct CovalentClient {
 }
 
 impl CovalentClient {
-    /// Create a new CovalentClient bound to a certain chain_id
+    /// Create a new CovalentClient bound to a crtain chain_id
     /// ## Klaytn Client Example
     /// ```
     /// let klaytn_client = CovalentClient::new("8127", "<YOUR_API_KEY>").unwrap();
@@ -63,8 +63,8 @@ impl CovalentClient {
     ) -> Result<resources::Balances, Box<dyn Error>> {
         let resp = make_request(
             format!(
-                "/{}/address/{}/balances_v2/?key={}",
-                self.chain_id, address, self.api_key
+                "{}/{}/address/{}/balances_v2/?key={}",
+                self.base_url, self.chain_id, address, self.api_key
             )
             .as_str(),
         )
@@ -80,8 +80,8 @@ impl CovalentClient {
     ) -> Result<resources::TokenHolders, Box<dyn Error>> {
         let resp = make_request(
             format!(
-                "/{}/address/{}/token_holders/?key={}",
-                self.chain_id, address, self.api_key
+                "{}/{}/address/{}/token_holders/?key={}",
+                self.base_url, self.chain_id, address, self.api_key
             )
             .as_str(),
         )
@@ -97,8 +97,8 @@ impl CovalentClient {
     ) -> Result<resources::Transactions, Box<dyn Error>> {
         let resp = make_request(
             format!(
-                "/{}/address/{}/transactions_v2/?key={}",
-                self.chain_id, address, self.api_key
+                "{}/{}/address/{}/transactions_v2/?key={}",
+                self.base_url, self.chain_id, address, self.api_key
             )
             .as_str(),
         )
@@ -113,8 +113,8 @@ impl CovalentClient {
     ) -> Result<resources::Transactions, Box<dyn Error>> {
         let resp = make_request(
             format!(
-                "/{}/address/{}/transaction_v2/?key={}",
-                self.chain_id, tx_hash, self.api_key
+                "{}/{}/address/{}/transaction_v2/?key={}",
+                self.base_url, self.chain_id, tx_hash, self.api_key
             )
             .as_str(),
         )

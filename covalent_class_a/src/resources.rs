@@ -17,7 +17,7 @@ pub struct BalanceItem {
     pub quote: f32,
 }
 
-#[derive(Deserialize, Debug, PartialEq, Clone)]
+#[derive(Deserialize, Debug, PartialEq, Clone, Default)]
 pub struct Balances {
     pub address: String,
     pub updated_at: String,
@@ -73,7 +73,7 @@ pub struct TransactionItem {
     pub log_events: Vec<()>,
 }
 
-#[derive(Deserialize, Debug, PartialEq, Clone)]
+#[derive(Deserialize, Debug, PartialEq, Clone, Default)]
 pub struct Transactions {
     pub address: String,
     pub updated_at: String,

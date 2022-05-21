@@ -1,10 +1,21 @@
 use covalent_class_a::{resources, CovalentClient};
+use lazy_static::lazy_static;
 use log::info;
 use std::error::Error;
+use std::sync::Arc;
 use wasm_bindgen::JsCast;
+use wasm_bindgen_futures::spawn_local;
 use web3::types::{Address, H256};
 use web_sys::{EventTarget, HtmlInputElement, InputEvent};
 use yew::prelude::*;
+
+lazy_static! {
+    static ref BACKEND_ADDR: String = "http://127.0.0.1:3030".to_string();
+}
+
+fn print_type_of<T>(_: &T) {
+    info!("{}", std::any::type_name::<T>())
+}
 
 pub struct App;
 
@@ -36,10 +47,11 @@ fn get_tx_hash(value: &str) -> Result<H256, Box<dyn Error>> {
     Ok(tx_hash)
 }
 
-#[derive(PartialEq, Clone)]
+#[derive(PartialEq, Clone, Debug)]
 pub enum SearchResultTypes {
-    Balances(resources::Balances),
-    Transactions(resources::Transactions),
+    BalancesData(resources::BalancesData),
+    TransactionsData(resources::TransactionsData),
+    TransactionData(resources::TransactionData),
 }
 
 pub struct SearchBar {
@@ -62,30 +74,42 @@ impl Component for SearchBar {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let on_change = ctx.link().callback(|e: InputEvent| {
-            // DESIGN:
-            // - user enters "one full data point" - like a tx_hash or an address etc.(I'll find more as I go through more API)
-            // - once a full data point is found - put some sort of loading indicator and send off the API calls through the backend library
-            // - (maybe) the api calls come back basically as a set of different rust structs. Maybe I have an enum of all possible structs that my SearchResult component can display and it will display each one slightly differently. This could be good cause it would allow me to have just one component for all results even if they vary a bit.
-
             let target: EventTarget = e.target().expect("Event should have a target");
-
-            // this form of on_change can only be used when the target is a HtmlInputElement
-            // the full_value is all of the text currently in the target HtmlInputElement
             let full_value = target.unchecked_into::<HtmlInputElement>().value();
 
             // TODO: comment out below logging when not testing
             info!("Current search query: {}", full_value);
-
             let results: Vec<SearchResultTypes> = vec![];
-            // The Klaytn mainnet chain_id on the unified Covalent API is 8127
-            // let _client = CovalentClient::new("8127")
-            // .expect("Could not create client");
 
             match get_address(&full_value) {
                 Ok(_) => {
                     info!("Found valid address");
-                    // TODO: re-setup axum backend and then use the yew fetch api here to call it
-                    // yew fetches from backend route(no parameters by default, let the backend handle configuration like chain_id) -> backend route uses library method to make api call, and serializes it to JSON -> frontend gets the JSON and deserializes it using the library resource structs
+                    // TODO: display "loading..." here while fetch api sends off the requests
+                    // TODO: implement search results for get_token_balances and details
+
+                    let covalent_client =
+                        CovalentClient::new("8217", "ckey_44f70254f9364489b8fddce0549")
+                            .expect("Could not create covalent client");
+
+                    let client = covalent_client.clone();
+                    let value = full_value.clone();
+                    // TODO: row and then on back look into pulling data from these asyncs with a channel
+                    spawn_local(async move {
+                        let balances = match client.get_token_balances(&value).await {
+                            Ok(balances) => balances,
+                            Err(e) => panic!("failed to get token balances: {}", e),
+                        };
+                        info!("Got balance address: {}", balances.data.address);
+                    });
+
+                    let client = covalent_client.clone();
+                    let value = full_value.clone();
+                    spawn_local(async move {
+                        let transactions = match client.get_transactions_for_address(&value).await {
+                            Ok(transactions) => transactions,
+                            Err(e) => panic!("failed to get transactions for address: {}", e),
+                        };
+                    });
                 }
                 Err(e) => info!("Not a valid address: {}", e),
             }
@@ -134,25 +158,26 @@ impl Component for SearchResultList {
         let mut rendered_results: Vec<Html> = vec![];
         for result in &self.props.results {
             match result {
-                SearchResultTypes::Balances(balances) => {
+                SearchResultTypes::BalancesData(balances) => {
                     rendered_results.push(html! {
                         <>
                             <h3>{ "Balances Result For Address" }</h3>
-                            <p>{ "For address:" } { &balances.address }</p>
-                            <p>{ "Currency:" } { &balances.quote_currency }</p>
+                            <p>{ "For address:" } { &balances.data.address }</p>
+                            <p>{ "Currency:" } { &balances.data.quote_currency }</p>
                         </>
                     });
                 }
-                SearchResultTypes::Transactions(transactions) => {
+                SearchResultTypes::TransactionsData(transactions) => {
                     rendered_results.push(html! {
                         <>
                             <h3>{ "Transactions Result For Address" }</h3>
-                            <p>{ "For address:" } { &transactions.address }</p>
-                            <p>{ "Currency:" } { &transactions.quote_currency }</p>
-                            <p> { "Chain ID:" } { &transactions.chain_id }</p>
+                            <p>{ "For address:" } { &transactions.data.address }</p>
+                            <p>{ "Currency:" } { &transactions.data.quote_currency }</p>
+                            <p> { "Chain ID:" } { &transactions.data.chain_id }</p>
                         </>
                     });
                 }
+                _ => panic!("unknown"),
             }
         }
         html! {

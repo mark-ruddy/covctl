@@ -2,8 +2,12 @@
 name = "covalent_class_a"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Rust wrapper for the Covalent Class A Endpoints https://www.covalenthq.com/docs/api"
+# TODO: update
+homepage = "https://github.com/mark-ruddy/covalent_class_a"
+repository = "https://github.com/mark-ruddy/covalent_class_a"
+license-file = "LICENSE.txt"
+readme = "README.md"
 
 [dependencies]
 serde = { version = "1.0.137", features = ["derive"] }
@@ -12,3 +16,5 @@ http = "0.2.7"
 reqwest = { version = "0.11.10", features = ["json"] }
 log = "0.4.17"
 env_logger = "0.9.0"
+lazy_static = "1.4.0"
+tokio = { version = "1.0", features = ["full"] }

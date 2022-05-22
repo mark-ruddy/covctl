@@ -55,9 +55,9 @@ impl CovalentClient {
     /// ```
     /// #[tokio::main]
     /// async fn main() {
-    /// let klaytn_client = covalent_class_a::CovalentClient::new_env_api_key("8217").unwrap();
-    /// let balances: covalent_class_a::resources::BalancesData = klaytn_client.get_token_balances("0xf4024faad5fafd0755875e3161524c9c4e1a1111", None, None).await.unwrap();
-    /// println!("Address: {}", balances.data.address);
+    ///     let klaytn_client = covalent_class_a::CovalentClient::new_env_api_key("8217").unwrap();
+    ///     let balances: covalent_class_a::resources::BalancesData = klaytn_client.get_token_balances("0xf4024faad5fafd0755875e3161524c9c4e1a1111", None, None).await.unwrap();
+    ///     println!("Address: {}", balances.data.address);
     /// }
     /// ```
     pub fn new(chain_id: &str, api_key: &str) -> Result<CovalentClient, Box<dyn Error>> {
@@ -74,9 +74,9 @@ impl CovalentClient {
     /// #[tokio::main]
     /// async fn main() {
     /// // In shell: export COVALENT_API_KEY = <YOUR_API_KEY>
-    /// let klaytn_client = covalent_class_a::CovalentClient::new_env_api_key("8217").unwrap();
+    ///     let klaytn_client = covalent_class_a::CovalentClient::new_env_api_key("8217").unwrap();
     /// // Make a get_token_balances request with pagination options page_size set to 10 and page_number set to 1
-    /// let balances: covalent_class_a::resources::BalancesData = klaytn_client.get_token_balances("0xf4024faad5fafd0755875e3161524c9c4e1a1111", Some("10".to_string()), Some("1".to_string())).await.unwrap();
+    ///     let balances: covalent_class_a::resources::BalancesData = klaytn_client.get_token_balances("0xf4024faad5fafd0755875e3161524c9c4e1a1111", Some("10".to_string()), Some("1".to_string())).await.unwrap();
     /// }
     /// ```
     pub fn new_env_api_key(chain_id: &str) -> Result<CovalentClient, Box<dyn Error>> {

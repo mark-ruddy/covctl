@@ -30,12 +30,12 @@ covctl --help
 ```
 
 ## What this project is useful for
-### What this project provides to developers
+### What covctl provides to developers
 `covctl` as a solid debugging tool to easily make Covalent API calls, and `covalent_class_a` for Rust developers who want to hook into the Covalent Class A Endpoints.  
 
 Having a client library available to interact with an API is a lot more approachable than implementing the direct HTTP API calls - more projects like `covalent_class_a` could drive uptake of the Covalent Unified APIs in general.  
 
-### What my project provides to users
+### What covctl provides to users
 `covctl` may be used by tech-savvy users who wish to make custom Covalent API calls without having to use `curl` and building the API URLs themselves. Admittedly this project likely will appeal more to developers than users since it lacks a webapp frontend.  
 
 The usability of `covctl` lies in how easy it is to make Covalent API calls without having to worry about structuring the API URL manually, the HTTP header, formatting the returned JSON etc.  

@@ -14,6 +14,15 @@ My initial plan for this hackathon project was very different to the hackathon p
 
 I transitioned my project to something I knew might be really useful to both developers and users who interact with the Covalent APIs: An easy to use CLI tool to query the Covalent Class A endpoints called `covctl`, and an underlying Rust library which exposes all of the Covlanet Class A Endpoints(except NFTs currently) to Rust developers called `covalent_class_a`.  
 
+## How to try out
+Hosting a CLI app like this is different to a website - I was going to provide an EC2 server and give the SSH private key file here, but I don't want an unauthorised user accessing an EC2 under my control and possibly breaking it or running up the CPU for a long period of time.
+
+if you want to try out the project its as easy as:
+```
+cargo install covctl
+covctl --help
+```
+
 ## Usability
 What my project provides to developers: `covctl` as a solid debugging tool to easily make Covalent API calls, and `covalent_class_a` for Rust developers who want to hook into the Covalent Class A Endpoints
 

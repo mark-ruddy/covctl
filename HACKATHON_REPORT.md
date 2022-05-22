@@ -2,6 +2,7 @@
 
 ## Links
 
+- Video Demo - https://www.youtube.com/watch?v=JpHNQ9KZcjA
 - Github Repo - https://github.com/mark-ruddy/covctl
 - `covctl` CLI tool source code and `README.md` - https://github.com/mark-ruddy/covctl/tree/main/covctl
 - `covalent_class_a` library source code and `README.md` - https://github.com/mark-ruddy/covctl/tree/main/covalent_class_a
@@ -13,6 +14,9 @@
 My initial plan for this hackathon project was very different to the hackathon project I ended up producing. The legacy of the original project remains in the `deprecated/` directory in the code repo. The original project would have been a webapp search tool for DeFi data within the Klaytn Mainnet - but I abandoned this project after realising I would not be able to produce a good-looking and dynamic frontend for it within the time-frame.  
 
 I transitioned my project to something I knew might be really useful to both developers and users who interact with the Covalent APIs: An easy to use CLI tool to query the Covalent Class A endpoints called `covctl`, and an underlying Rust library which exposes all of the Covlanet Class A Endpoints(except NFTs currently) to Rust developers called `covalent_class_a`.  
+
+- This project isn't necessarily related to DeFi - but it can be used for DeFi data
+- This projects equivalent of a webapp frontend is the CLI tool `covctl` - I understand that this only appeals to advanced users or developers
 
 ## How to try out
 Hosting a CLI app like this is different to a website - I was going to provide an EC2 server and give the SSH private key file here, but I don't want an unauthorised user accessing an EC2 under my control and possibly breaking it or running up the CPU for a long period of time.

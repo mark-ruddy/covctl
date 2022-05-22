@@ -8,10 +8,12 @@
 - `covalent_class_a` library source code and `README.md` - https://github.com/mark-ruddy/covctl/tree/main/covalent_class_a
 - Crates.io for `covctl` - https://crates.io/crates/covctl
 - Crates.io for `covalent_class_a` - https://crates.io/crates/covalent_class_a
-- Developer documentation `covalent_class_a` - https://docs.rs/covalent_class_a/0.1.0/covalent_class_a/struct.CovalentClient.html
+- Developer documentation `covalent_class_a` - https://docs.rs/covalent_class_a/0.1.1/covalent_class_a/struct.CovalentClient.html
 
 ## Project Description
-My initial plan for this hackathon project was very different to the hackathon project I ended up producing. The legacy of the original project remains in the `deprecated/` directory in the code repo. The original project would have been a webapp search tool for DeFi data within the Klaytn Mainnet - but I abandoned this project after realising I would not be able to produce a good-looking and dynamic frontend for it within the time-frame.  
+My initial plan for this hackathon project was very different to the hackathon project I ended up producing. The legacy of the original project remains in the `deprecated/` directory in the code repo.  
+
+The original project would have been a webapp search tool for DeFi data within the Klaytn Mainnet - but I abandoned this project after realising I would not be able to produce a good-looking and dynamic frontend for it within the time-frame.  
 
 I transitioned my project to something I knew might be really useful to both developers and users who interact with the Covalent APIs: An easy to use CLI tool to query the Covalent Class A endpoints called `covctl`, and an underlying Rust library which exposes all of the Covlanet Class A Endpoints(except NFTs currently) to Rust developers called `covalent_class_a`.  
 
@@ -27,10 +29,14 @@ cargo install covctl
 covctl --help
 ```
 
-## Usability
-What my project provides to developers: `covctl` as a solid debugging tool to easily make Covalent API calls, and `covalent_class_a` for Rust developers who want to hook into the Covalent Class A Endpoints
+## What this project is useful for
+### What this project provides to developers
+`covctl` as a solid debugging tool to easily make Covalent API calls, and `covalent_class_a` for Rust developers who want to hook into the Covalent Class A Endpoints.  
 
-What my project provides to users: `covctl` may be used by tech-savvy users who wish to make custom Covalent API calls without having to use `curl` and building the API URLs themselves. Admittedly this project likely will appeal more to developers than users since it lacks a webapp frontend.
+Having a client library available to interact with an API is a lot more approachable than implementing the direct HTTP API calls - more projects like `covalent_class_a` could drive uptake of the Covalent Unified APIs in general.  
+
+### What my project provides to users
+`covctl` may be used by tech-savvy users who wish to make custom Covalent API calls without having to use `curl` and building the API URLs themselves. Admittedly this project likely will appeal more to developers than users since it lacks a webapp frontend.  
 
 The usability of `covctl` lies in how easy it is to make Covalent API calls without having to worry about structuring the API URL manually, the HTTP header, formatting the returned JSON etc.  
 

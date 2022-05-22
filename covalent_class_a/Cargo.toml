@@ -3,9 +3,8 @@ name = "covalent_class_a"
 version = "0.1.0"
 edition = "2021"
 description = "Rust wrapper for the Covalent Class A Endpoints https://www.covalenthq.com/docs/api"
-# TODO: update
-homepage = "https://github.com/mark-ruddy/covalent_class_a"
-repository = "https://github.com/mark-ruddy/covalent_class_a"
+homepage = "https://github.com/mark-ruddy/covctl/tree/main/covalent_class_a"
+repository = "https://github.com/mark-ruddy/covctl/tree/main/covalent_class_a"
 license-file = "LICENSE.txt"
 readme = "README.md"
 

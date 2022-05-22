@@ -147,6 +147,7 @@ struct QuoteCurrencyPageFlag {
 }
 
 #[derive(Parser)]
+#[clap(author, version, about, long_about = None)]
 struct Args {
     #[clap(subcommand)]
     action: Action,

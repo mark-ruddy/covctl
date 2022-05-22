@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 web3 = { version = "0.18.0", default_features = false, features = ["wasm"] }
-covalent_class_a = { path = "../covalent_class_a/" }
+covalent_class_a = "0.1.0"
 yew = "0.19"
 serde_json = "1.0.81"
 yew-stdweb = "0.18.0"

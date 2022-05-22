@@ -9,7 +9,7 @@ edition = "2021"
 # custom library in parent directory
 # in future this library could be published on crates.io
 # and pulled from there instead of a directory in this git repo
-covalent_class_a = { path = "../covalent_class_a" }
+covalent_class_a = "0.1.0"
 axum = "0.5.5"
 tokio = { version = "1.0", features = ["full"] }
 log = "0.4.17"

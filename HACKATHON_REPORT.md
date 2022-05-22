@@ -30,4 +30,4 @@ One of my major goals during the development of `covctl` and `covalent_class_a` 
 - Documentation - `covalent_class_a` has auto-documentation comments written for every function and some example code for developers. Both projects have a descriptive and clear `README.md`
 - Usability - Installation of `covctl` is as simple as `cargo install covctl`, and by specifying `covctl --help` all the flags are viewable. The `covalent_class_a` library is auto-documented and straightforward for any Rust project to hook into using it
 
-I believe overall I accomplished my goals for the engineering side of this project - and that this project is now "extensible". The implementation of certain Covlaent Class B and the NFT section of Class As would be a straightforward but still time-consuming development task.
+I believe overall I accomplished my goals for the engineering side of this project - and that this project is now "extensible". The implementation of certain Covalent Class B and the NFT section of Class As would be a straightforward but still time-consuming development task.

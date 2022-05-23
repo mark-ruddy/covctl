@@ -11,7 +11,7 @@ let balances: covalent_class_a::resources::BalancesData = klaytn_client.get_toke
 println!("Address: {}", balances.data.address);
 ```
 
-For more examples see the docs: https://docs.rs/covalent_class_a/0.1.1/covalent_class_a/struct.CovalentClient.html 
+For more examples see the docs: https://docs.rs/covalent_class_a/latest/covalent_class_a/struct.CovalentClient.html
 
 ## CLI Interface
 See `covctl` at https://github.com/mark-ruddy/covctl for the CLI interface to this library

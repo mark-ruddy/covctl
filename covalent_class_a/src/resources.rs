@@ -261,7 +261,7 @@ pub struct TokenTransferItem {
     pub contract_address: String,
     pub logo_url: String,
     pub transfer_type: String,
-    pub delta: f64,
+    pub delta: Option<String>,
     pub balance: Option<f64>,
     pub quote_rate: Option<f64>,
     pub delta_quote: Option<f64>,

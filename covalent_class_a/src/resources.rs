@@ -243,30 +243,30 @@ pub struct HistoricalPortfolioData {
 // ERC20 TOKEN TRANSFERS
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]
 pub struct MethodCallsForTransfers {
-    sender_address: String,
-    method: String,
+    pub sender_address: String,
+    pub method: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]
 pub struct TokenTransferItem {
-    block_signed_at: String,
-    tx_hash: String,
-    from_address: String,
-    from_address_label: Option<String>,
-    to_address: String,
-    to_address_label: Option<String>,
-    contract_decimals: i32,
-    contract_name: String,
-    contract_ticker_symbol: String,
-    contract_address: String,
-    logo_url: String,
-    transfer_type: String,
-    delta: f64,
-    balance: Option<f64>,
-    quote_rate: Option<f64>,
-    delta_quote: Option<f64>,
-    balance_quote: Option<f64>,
-    method_calls: Option<Vec<MethodCallsForTransfers>>,
+    pub block_signed_at: String,
+    pub tx_hash: String,
+    pub from_address: String,
+    pub from_address_label: Option<String>,
+    pub to_address: String,
+    pub to_address_label: Option<String>,
+    pub contract_decimals: i32,
+    pub contract_name: String,
+    pub contract_ticker_symbol: String,
+    pub contract_address: String,
+    pub logo_url: String,
+    pub transfer_type: String,
+    pub delta: f64,
+    pub balance: Option<f64>,
+    pub quote_rate: Option<f64>,
+    pub delta_quote: Option<f64>,
+    pub balance_quote: Option<f64>,
+    pub method_calls: Option<Vec<MethodCallsForTransfers>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
@@ -300,12 +300,12 @@ pub struct TokenTransfersData {
 // CHANGES IN TOKEN HOLDERS
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]
 pub struct ChangesInTokenHoldersItem {
-    token_holder: String,
-    prev_balance: String,
-    prev_block_height: i64,
-    next_balance: String,
-    next_block_height: i64,
-    diff: i64,
+    pub token_holder: String,
+    pub prev_balance: String,
+    pub prev_block_height: i64,
+    pub next_balance: String,
+    pub next_block_height: i64,
+    pub diff: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]
@@ -367,12 +367,12 @@ pub struct LogEventsGenericData {
 // CONTRACT METADATA
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]
 pub struct ContractMetadataItem {
-    contract_decimals: i32,
-    contract_name: Option<String>,
-    contract_ticker_symbol: Option<String>,
-    contract_address: String,
-    supports_erc: Option<Vec<String>>,
-    logo_url: String,
+    pub contract_decimals: i32,
+    pub contract_name: Option<String>,
+    pub contract_ticker_symbol: Option<String>,
+    pub contract_address: String,
+    pub supports_erc: Option<Vec<String>>,
+    pub logo_url: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]
@@ -397,12 +397,12 @@ pub struct ContractMetadataData {
 // ALL CHAINS
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]
 pub struct GenericChainInfoDisplay {
-    name: String,
-    chain_id: String,
-    is_testnet: bool,
-    db_schema_name: String,
-    label: String,
-    logo_url: String,
+    pub name: String,
+    pub chain_id: String,
+    pub is_testnet: bool,
+    pub db_schema_name: String,
+    pub label: String,
+    pub logo_url: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]
@@ -424,12 +424,12 @@ pub struct AllChainData {
 // All CHAINS STATUSES
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]
 pub struct GenericChainInfoStatusDisplay {
-    name: String,
-    chain_id: String,
-    is_testnet: bool,
-    logo_url: String,
-    synced_block_height: i32,
-    synced_blocked_signed_at: String,
+    pub name: String,
+    pub chain_id: String,
+    pub is_testnet: bool,
+    pub logo_url: String,
+    pub synced_block_height: i32,
+    pub synced_blocked_signed_at: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Default)]

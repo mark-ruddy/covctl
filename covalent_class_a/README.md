@@ -2,7 +2,7 @@
 Rust wrapper for the Covalent Class A Endpoints: https://www.covalenthq.com/docs/api  
 
 ## Klaytn Client Example
-Set your API key as an environment variable: `export COVALENT_API_KEY=<YOUR_API_KEY>`
+Set your API key as an environment variable: `export COVALENT_API_KEY=<YOUR_API_KEY>`, or you can use the `CovalentClient::new("8217", "<YOUR_API_KEY>")` function to pass the API key in as a code parameter  
 
 In the below example a client is created which will use the Klaytn Mainnet(8217) and a unified covalent API call is made to the Get Token Balances endpoint:
 ```
@@ -11,7 +11,7 @@ let balances: covalent_class_a::resources::BalancesData = klaytn_client.get_toke
 println!("Address: {}", balances.data.address);
 ```
 
-For more examples see the docs: TODO
+For more examples see the docs: https://docs.rs/covalent_class_a/0.1.1/covalent_class_a/struct.CovalentClient.html 
 
 ## CLI Interface
 See `covctl` at https://github.com/mark-ruddy/covctl for the CLI interface to this library

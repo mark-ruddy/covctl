@@ -273,7 +273,6 @@ pub struct TokenTransferItem {
 pub struct BlockTransactionWithContractTransfers {
     #[serde(flatten)]
     pub transaction: BaseTransaction,
-    #[serde(skip_deserializing, skip_serializing)]
     pub transfers: Vec<TokenTransferItem>,
 }
 

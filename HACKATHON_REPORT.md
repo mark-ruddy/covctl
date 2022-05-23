@@ -9,6 +9,7 @@
 - Crates.io for `covctl` - https://crates.io/crates/covctl
 - Crates.io for `covalent_class_a` - https://crates.io/crates/covalent_class_a
 - Developer documentation `covalent_class_a` - https://docs.rs/covalent_class_a/0.1.1/covalent_class_a/struct.CovalentClient.html
+- Slight bug found in ContractMetadata Covalent endpoint, see bottom of this page for info
 
 ## Project Description
 My initial plan for this hackathon project was very different to the hackathon project I ended up producing. The legacy of the original project remains in the `deprecated/` directory in the code repo.  
@@ -50,3 +51,14 @@ One of my major goals during the development of `covctl` and `covalent_class_a` 
 - Usability - Installation of `covctl` is as simple as `cargo install covctl`, and by specifying `covctl --help` all the flags are viewable. The `covalent_class_a` library is auto-documented and straightforward for any Rust project to hook into using it
 
 I believe overall I accomplished my goals for the engineering side of this project - and that this project is now "extensible". The implementation of certain Covalent Class B and the NFT section of Class As would be a straightforward but still time-consuming development task.
+
+## Slight bug in Contract Metadata Covalent Endpoint
+See line 381 in `covalent_class_a` `resources.rs`, there is a slight bug in the Covalent `GetAllContractMetadata` endpoint.
+
+Basically the `items` returned is wrapped in 2 JS arrays unnecessary: like `items: [[...]]`, instead of the expected `items: [...]`.
+
+You can reproduce this by running the preview example on the Covalent API docs website: https://www.covalenthq.com/docs/api/#/0/Get%20all%20contract%20metadata/USD/1.  
+
+Also there is another slight issues with the `LogDecodedParams` resource(from the transactions endpoint https://www.covalenthq.com/docs/api/#/0/Get%20transactions%20for%20address/USD/1) where a `value` can either be a `String` or an `Array`. This makes it difficult to parse in a strongly typed language like Rust, see line 101 in `covalent_class_a` `resources.rs`.  
+
+Maybe this is intended behavior, but they may be slight bugs that could be fixed. The APIs are generally great to use - so I'm reporting even the slightest issues to allow you to be aware of them :)  
